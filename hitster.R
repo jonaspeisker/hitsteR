@@ -6,10 +6,23 @@ library(gridtext)
 library(ggqr)
 library(Cairo)
 
-#### get tracks from Spotify ####
+#### settings ####
+# set ID of the playlist you want to turn into a game 
+# https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids
+# for playlist "Top 100 Greatest Songs of All Time"
+# https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=b7546d23b6284203
+playlist_id  <-  "6i2Qd6OpeRBAzxfscNXeWp"
+
 # set my_client_id and my_client_secret in login.R
 # https://developer.spotify.com/my-applications/#!/applications
 source("login.R")
+
+# set card size, possible values: 
+# small (3.8 cm), 12 cards per DIN A4 page
+# original (6.5 cm), 35 cards per page
+card_size <- "small"
+
+#### get tracks from Spotify ####
 Sys.setenv(SPOTIFY_CLIENT_ID = my_client_id)
 Sys.setenv(SPOTIFY_CLIENT_SECRET = my_client_secret)
 access_token <- get_spotify_access_token()
@@ -18,12 +31,6 @@ access_token <- get_spotify_access_token()
 my_auth <- 
   get_spotify_authorization_code(
     c("playlist-read-private","playlist-read-collaborative"))
-
-# set ID of the playlist you want to turn into a game 
-# https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids
-# for playlist "Top 100 Greatest Songs of All Time"
-# https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=b7546d23b6284203
-playlist_id  <-  "6i2Qd6OpeRBAzxfscNXeWp"
 
 # iterate over pages since the API only returns 100 entries at a time
 songs_raw <- tibble()
@@ -54,10 +61,18 @@ songs <-
 # paper size DIN A4: 21.0 cm x 29.7 cm
 paper_width <- 21
 paper_height <- 29.7
-# original card size is 6.5x6.5cm
-# decreased to fit more cards on each page
-# -> less printing and cutting required
-card_width <- 3.8 
+card_width <- case_when(
+  card_size == "small" ~ 3.8,
+  card_size == "original" ~ 6.5
+  )
+small_font_size <- case_when(
+  card_size == "small" ~ 9,
+  card_size == "original" ~ 12
+)
+large_font_size <- case_when(
+  card_size == "small" ~ 32,
+  card_size == "original" ~ 60
+)
 # number of cards along the axes
 n_cards_x <- paper_width %/% card_width
 n_cards_y <- paper_height %/% card_width
@@ -87,7 +102,7 @@ y_right <- rep(gy_right[-1] - unit(card_width/2, "cm"), each = length(gx_right)-
 Cairo(
   width = paper_width, 
   height = paper_height, 
-  file = "output/hitster.pdf", 
+  file = paste0("output/hitster_", card_size, ".pdf"), 
   type = "pdf", 
   units = "cm"
 )
@@ -112,7 +127,7 @@ for (page in 1:pages) {
       width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
       hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
       margin = unit(rep(2,4), "pt"),
-      gp = gpar(lineheight=0.9, fontsize=9)#,
+      gp = gpar(lineheight=0.9, fontsize=small_font_size)#,
       # box_gp = gpar(col = "black", fill = "lightblue")
     )
     grid.draw(artist_grob)
@@ -129,7 +144,7 @@ for (page in 1:pages) {
       width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
       hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
       margin = unit(rep(2,4), "pt"),
-      gp = gpar(lineheight=0.9, fontsize=30)#,
+      gp = gpar(lineheight=0.9, fontsize=large_font_size)#,
       # box_gp = gpar(col = "black", fill = "cornsilk")
     )
     grid.draw(year_grob)
@@ -146,7 +161,7 @@ for (page in 1:pages) {
       width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
       hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
       margin = unit(rep(2,4), "pt"),
-      gp = gpar(lineheight=0.9, fontsize=9)#,
+      gp = gpar(lineheight=0.9, fontsize=small_font_size)#,
       # box_gp = gpar(col = "black", fill = "lightgreen")
     )
     grid.draw(title_grob)
@@ -157,7 +172,12 @@ for (page in 1:pages) {
   grid.grill(v = gx_right, h = gy_right, gp=gpar(col="grey"))
   for (i in 1:cards_per_page) {
     song_num <- i + cards_per_page * (page - 1)
-    qr <- qrGrob(label = songs$url[song_num], x = x_right[i], y = y_right[i], hjust = 0.5, vjust = 0.5, size = unit(card_width*0.8, "cm"))
+    qr <- qrGrob(
+      label = songs$url[song_num], 
+      x = x_right[i], y = y_right[i], 
+      hjust = 0.5, vjust = 0.5, 
+      size = unit(card_width*0.8, "cm")
+    )
     grid.draw(qr)
   }
 }
