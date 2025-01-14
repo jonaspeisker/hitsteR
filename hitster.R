@@ -15,7 +15,7 @@ playlist_id  <-  "6i2Qd6OpeRBAzxfscNXeWp"
 
 # set my_client_id and my_client_secret in login.R
 # https://developer.spotify.com/my-applications/#!/applications
-source("login.R")
+source(".Renviron")
 
 # set card size, possible values: 
 # small (3.8 cm), 12 cards per DIN A4 page
