@@ -35,7 +35,8 @@ get_tracks <- function(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp"){
       track = track.name,
       url = track.external_urls.spotify,
       .keep = "none"
-    ) 
+    ) %>% 
+    arrange(year)
   print(paste0("Got ", nrow(tracks), " tracks."))
   print("Distribution of years:")
   print(quantile(tracks$year))
@@ -53,6 +54,7 @@ make_cards <- function(
   require(gridtext)
   require(ggqr)
   require(Cairo)
+  require(scico)
   
   if (paper_size == "a4") {
     paper_width <- 21
@@ -77,11 +79,19 @@ make_cards <- function(
   }
   
   if (is.null(file)) {
-    out <- paste0("output/hitster_", card_size, "_", paper_size, ".pdf")
+    out <- paste0("output/hitster_", card_size, "_", paper_size, ifelse(color, "_color", "_bw"), ".pdf")
   } else if (is.character(file)) {
     out <- file
   } else {
     stop("File should be NULL or a string.")
+  }
+  
+  if (color == FALSE) {
+    tracks$font_color <- "black"
+  } else if (color == TRUE) {
+    tracks$font_color <- scico(nrow(tracks), begin=0, end=1, palette = "batlow")
+  } else {
+    stop("Color should be boolean.")
   }
   
   # number of cards along the axes
@@ -138,7 +148,7 @@ make_cards <- function(
         width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = unit(rep(2,4), "pt"),
-        gp = gpar(lineheight=0.9, fontsize=small_font_size)#,
+        gp = gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,
         # box_gp = gpar(col = "black", fill = "lightblue")
       )
       grid.draw(artist_grob)
@@ -155,7 +165,7 @@ make_cards <- function(
         width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = unit(rep(2,4), "pt"),
-        gp = gpar(lineheight=0.9, fontsize=large_font_size)#,
+        gp = gpar(lineheight=0.9, fontsize=large_font_size, col=tracks$font_color[track_num])#,
         # box_gp = gpar(col = "black", fill = "cornsilk")
       )
       grid.draw(year_grob)
@@ -172,7 +182,7 @@ make_cards <- function(
         width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = unit(rep(2,4), "pt"),
-        gp = gpar(lineheight=0.9, fontsize=small_font_size)#,
+        gp = gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,
         # box_gp = gpar(col = "black", fill = "lightgreen")
       )
       grid.draw(title_grob)

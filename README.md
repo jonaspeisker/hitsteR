@@ -1,9 +1,8 @@
 # hitsteR
 
-[![Language: R](https://img.shields.io/badge/Language-R-blue?logo=r)][r]
-[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)][gplv3]
-
 R functions to make a game similar to [Hitster][hitster] and [QRSong!][qrsong]. Based on a Spotify playlist, it generates a pdf with artist, year, and song title on one side and a QR code to play the song on the other side.
+
+![Example output](output/example.png)
 
 ## Steps
 
@@ -24,7 +23,11 @@ R functions to make a game similar to [Hitster][hitster] and [QRSong!][qrsong]. 
   - file: a valid path to a pdf file (default: NULL, save file in output/)
   - card_size: "small" (3.8 cm) or "original" (6.5 cm) (default: "small")
   - paper_size: "a4" or "letter" (default: "a4"),
-  - color: color font based on year (default: FALSE), planned
+  - color: color font based on year (default: FALSE)
+
+## How to play
+
+The rules of game can be found [here](https://hitstergame.com/en-us/how-to-play/).
 
 ## License
 

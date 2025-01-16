@@ -5,6 +5,7 @@ library(gridtext)
 # remotes::install_github('coolbutuseless/ggqr')
 library(ggqr)
 library(Cairo)
+library(scico)
 
 # set my_client_id and my_client_secret in .Renviron
 # https://developer.spotify.com/my-applications/#!/applications
@@ -15,4 +16,4 @@ source("hitster_fun.R")
 my_tracks <- get_tracks()
 
 # make card layout
-make_cards(tracks = my_tracks)
+make_cards(tracks = my_tracks, color = TRUE)
