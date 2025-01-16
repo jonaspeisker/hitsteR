@@ -17,13 +17,13 @@ R functions to make a game similar to [Hitster][hitster] and [QRSong!][qrsong]. 
 ## Functions
 
 - get_tracks(playlist_id): download track info from Spotify and prepare it for plotting 
-  - playlist_id: a [Spotify playlist ID][playlist-id] (default: [Top 100 Greatest Songs of All Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=b7546d23b6284203)
+  - playlist_id: a [Spotify playlist ID][playlist-id] (default: [Top 100 Greatest Songs of All Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=b7546d23b6284203))
 
 - make_cards(tracks, file, card_size, paper_size, color): make a pdf of playing cards
   - tracks: a data frame created with get_tracks()
   - file: a valid path to a pdf file (default: NULL, save file in output/)
   - card_size: "small" (3.8 cm) or "original" (6.5 cm) (default: "small")
-  - paper_size = "a4" or "letter" (default: "a4"),
+  - paper_size: "a4" or "letter" (default: "a4"),
   - color: color font based on year (default: FALSE), planned
 
 ## License
