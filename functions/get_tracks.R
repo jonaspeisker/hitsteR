@@ -26,6 +26,7 @@ get_tracks <- function(playlist_id){
     unnest_wider(track.artists) %>% 
     unnest_wider(name, names_sep = "artist") %>%
     mutate(
+      artist1 = nameartist1,
       artist = if_else(
         is.na(nameartist2), 
         nameartist1, 
