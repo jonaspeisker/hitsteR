@@ -12,9 +12,14 @@ library(scico)
 source(".Renviron")
 source("get_tracks.R")
 source("make_cards.R")
+source("make_examples.r")
 
 # download and clean track info
 my_tracks <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
 
-# make card layout
+# make single card layout
 make_cards(tracks = my_tracks, color = TRUE)
+
+# make all examples in /output
+make_examples()
+
