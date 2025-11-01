@@ -10,10 +10,11 @@ library(scico)
 # set my_client_id and my_client_secret in .Renviron
 # https://developer.spotify.com/my-applications/#!/applications
 source(".Renviron")
-source("hitster_fun.R")
+source("get_tracks.R")
+source("make_cards.R")
 
 # download and clean track info
-my_tracks <- get_tracks()
+my_tracks <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
 
 # make card layout
 make_cards(tracks = my_tracks, color = TRUE)
