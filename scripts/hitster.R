@@ -11,11 +11,15 @@ library(scico)
 # https://developer.spotify.com/my-applications/#!/applications
 source(".Renviron")
 source("functions/get_tracks.R")
+source("functions/clean_tracks.R")
 source("functions/make_cards.R")
 source("functions/make_examples.R")
 
-# download and clean track info
-my_tracks <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
+# download track info
+my_tracks_raw <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
+
+# clean track info
+my_tracks <- clean_tracks(my_tracks_raw)
 
 # make single card layout
 make_cards(tracks = my_tracks, color = TRUE)

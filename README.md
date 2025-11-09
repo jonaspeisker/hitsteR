@@ -1,6 +1,6 @@
 # hitsteR
 
-R functions to make a game similar to [Hitster][hitster] and [QRSong!][qrsong]. Based on a Spotify playlist, it generates a pdf with artist, year, and song title on one side and a QR code to play the song on the other side.
+R functions to make a song guessing game. Based on a Spotify playlist, they generate a pdf with artist, year, and song title on one side and a QR code to play the song on the other side.
 
 ![Example output](output/example.png)
 
@@ -8,7 +8,7 @@ R functions to make a game similar to [Hitster][hitster] and [QRSong!][qrsong]. 
 
 1. Create a Spotify playlist or select a public one that you want to turn into a game. The years of the songs should be approximately uniformly distributed over several decades. 
 1. Assign your [Spotify client ID and client secret][spotify-dev] to `my_client_id` and `my_client_secret` in .Renviron. 
-3. Run the hitster.R to download and clean the track info with get_tracks() and create a pdf of playing cards with make_cards().
+3. Run the hitster.R to download and clean the track info and create a pdf of playing cards.
 4. Print the pdf double-sided and mirrored on the long edge. For best results use heavy paper or laminate the pages.
 5. Cut pages along the marks.
 6. Enjoy!

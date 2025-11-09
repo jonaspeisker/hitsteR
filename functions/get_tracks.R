@@ -1,5 +1,4 @@
 get_tracks <- function(playlist_id){
-  require(tidyverse)
   require(spotifyr)
   
   # set credentials for Spotify API
@@ -13,33 +12,12 @@ get_tracks <- function(playlist_id){
       c("playlist-read-private","playlist-read-collaborative"))
   
   # iterate over pages since the API only returns 100 entries at a time
-  tracks_raw <- tibble()
+  tracks_raw <- data.frame()
   for (page in seq(0, 200, 100)) {
     tmp <- get_playlist_tracks(playlist_id, offset = page)
-    tracks_raw <- bind_rows(tracks_raw, tmp)
+    tracks_raw <- rbind(tracks_raw, tmp)
   }
+  print(paste0("Got raw data on ", nrow(tracks_raw), " tracks."))
   
-  # clean data and paste together artist names
-  # only the first two artists are considered
-  tracks <-
-    tracks_raw %>%
-    unnest_wider(track.artists) %>% 
-    unnest_wider(name, names_sep = "artist") %>%
-    mutate(
-      artist1 = nameartist1,
-      artist = if_else(
-        is.na(nameartist2), 
-        nameartist1, 
-        paste(nameartist1, nameartist2, sep = " & ")
-      ),
-      year = as.integer(substr(track.album.release_date, 1, 4)),
-      track = track.name,
-      url = track.external_urls.spotify,
-      .keep = "none"
-    ) %>% 
-    arrange(year)
-  print(paste0("Got ", nrow(tracks), " tracks."))
-  print("Distribution of years:")
-  print(quantile(tracks$year))
-  return(tracks)
+  return(tracks_raw)
 }
