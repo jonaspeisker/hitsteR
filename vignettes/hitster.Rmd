@@ -1,0 +1,29 @@
+---
+title: "Making a song guessing game in R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Making a song guessing game in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hitsteR)
+```
+
+# Get and clean tracks from Spotify API
+
+# Make layout
+
+# Prepare cards
+
+- Print the pdf double-sided and mirrored on the long edge. For best results use heavy paper or laminate the pages.
+- Cut pages along the marks.
+- Enjoy!

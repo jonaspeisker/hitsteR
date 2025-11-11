@@ -1,0 +1,35 @@
+Package: hitsteR
+Title: Functions to make a song guessing game
+Version: 0.1.0
+Authors@R: 
+    person(
+      "Jonas", "Peisker", ,
+      "mail@jonaspeisker.de", 
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-6114-3545")
+    )
+Description: This package provides utility functions to get track data for a Spoity playlist, clean the data, and make a pdf of playing cards. The card contain a QR code to the Spotify URL on one side and the track artist, year, and name on the other side. Before playing, the cards need to be cut along the provided guide lines.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports: 
+    Cairo,
+    dplyr,
+    ggqr,
+    grDevices,
+    grid,
+    gridtext,
+    httr,
+    jsonlite,
+    scico,
+    spotifyr,
+    tidyr
+Depends: 
+    R (>= 4.1)
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3

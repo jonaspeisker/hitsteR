@@ -6,3 +6,7 @@
 .Renviron
 .httr-oauth
 *_old.R
+inst/doc
+/doc/
+/Meta/
+/scripts/

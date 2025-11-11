@@ -31,7 +31,7 @@ oo_dump_flat <-
     birth = as.integer(substr(birth, 1, 4)),
     death = as.integer(substr(death, 1, 4)),
   )
-oo_dump_flat
+oo_dump_flat 
 
 # save missing composers
 composers_not_in_oo <- 
@@ -55,10 +55,24 @@ composers
 # merge track with composer info
 history_tracks_merge <- 
   history_tracks %>% 
-  stringdist_left_join(composers, by = join_by(artist1))
+  stringdist_left_join(composers, by = join_by(artist1)) %>% 
+  mutate(
+    artist = paste0(artist1.x, " (", birth, "-", death, ")")
+  ) %>% 
+  select(-year)
+history_tracks_merge %>% 
+  write_csv(file = "data/history_tracks_merge.csv")
+# history_tracks_merge %>% summary
+# history_tracks_merge %>% 
+#   ggplot() +
+#   geom_histogram(aes(birth), binwidth = 100)
 
 # make single card layout
-make_cards(tracks = my_tracks, color = TRUE)
+make_cards(
+  tracks = history_tracks_merge, 
+  color = TRUE,
+  file = "output/history_hitster_small_a4_color.pdf"
+  )
 
 # make all examples in /output
 make_examples()

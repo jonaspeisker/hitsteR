@@ -1,3 +1,4 @@
+library(hitsteR)
 library(tidyverse)
 library(spotifyr)
 library(grid)
@@ -10,10 +11,7 @@ library(scico)
 # set my_client_id and my_client_secret in .Renviron
 # https://developer.spotify.com/my-applications/#!/applications
 source(".Renviron")
-source("functions/get_tracks.R")
-source("functions/clean_tracks.R")
-source("functions/make_cards.R")
-source("functions/make_examples.R")
+
 
 # download track info
 my_tracks_raw <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
