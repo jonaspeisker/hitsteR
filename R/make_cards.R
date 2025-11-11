@@ -69,18 +69,18 @@ make_cards <- function(
   
   # left hand page
   # grid coords
-  gx_left <- unit(seq(margin_x, paper_width, card_width), "cm")
-  gy_left <- unit(seq(margin_y, paper_height, card_width), "cm")
+  gx_left <- grid::unit(seq(margin_x, paper_width, card_width), "cm")
+  gy_left <- grid::unit(seq(margin_y, paper_height, card_width), "cm")
   # content coords
-  x_left <- rep(gx_left[-1] - unit(card_width/2, "cm"), times = length(gy_left)-1)
-  y_left <- rep(gy_left[-1] - unit(card_width/2, "cm"), each = length(gx_left)-1)
+  x_left <- rep(gx_left[-1] - grid::unit(card_width/2, "cm"), times = length(gy_left)-1)
+  y_left <- rep(gy_left[-1] - grid::unit(card_width/2, "cm"), each = length(gx_left)-1)
   # data.frame(x_left,y_left)
   
   # right hand page (mirrored on y axis)
-  gx_right <- unit(seq(paper_width - margin_x, 0, -card_width), "cm")
+  gx_right <- grid::unit(seq(paper_width - margin_x, 0, -card_width), "cm")
   gy_right <- gy_left
-  x_right <- rep(gx_right[-1] + unit(card_width/2, "cm"), times = length(gy_right)-1)
-  y_right <- rep(gy_right[-1] - unit(card_width/2, "cm"), each = length(gx_right)-1)
+  x_right <- rep(gx_right[-1] + grid::unit(card_width/2, "cm"), times = length(gy_right)-1)
+  y_right <- rep(gy_right[-1] - grid::unit(card_width/2, "cm"), each = length(gx_right)-1)
   # data.frame(x_right,y_right)
   
   #### make pdf ####
@@ -102,50 +102,67 @@ make_cards <- function(
       
       # create viewport for artist
       artist_vp <- grid::viewport(
-        x = x_left[i], y = y_left[i] + unit(card_width, "cm") / 3,
-        width = grid::unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
+        x = x_left[i],
+        y = y_left[i] + grid::unit(card_width, "cm") / 3,
+        width = grid::unit(card_width, "cm"),
+        height = grid::unit(card_width, "cm") / 3, 
         clip = "on" # avoid text on the neighboring cards
       )
       artist_grob <- gridtext::textbox_grob(
         vp = artist_vp,
         text = tracks$artist[track_num],
-        width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"), 
+        height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
-        margin = unit(rep(2,4), "pt"),
-        gp = grid::gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,
-        # box_gp = gpar(col = "black", fill = "lightblue")
+        margin = grid::unit(rep(2,4), "pt"),
+        gp = grid::gpar(
+          lineheight=0.9, 
+          fontsize=small_font_size,
+          col=tracks$font_color[track_num]
+          )#,
+          # box_gp = gpar(col = "black", fill = "lightblue")
       )
       grid::grid.draw(artist_grob)
       
       # create viewport for year        
       year_vp <- grid::viewport(
-        x = x_left[i], y = y_left[i],
-        width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
+        x = x_left[i],
+        y = y_left[i],
+        width = grid::unit(card_width, "cm"),
+        height = grid::unit(card_width, "cm") / 3, 
         clip = "on" # avoid text on the neighboring cards
       )
       year_grob <- gridtext::textbox_grob(
         vp = year_vp,
         text = tracks$year[track_num],
-        width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"),
+        height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
-        margin = unit(rep(2,4), "pt"),
-        gp = grid::gpar(lineheight=0.9, fontsize=large_font_size, col=tracks$font_color[track_num])#,
+        margin = grid::unit(rep(2,4), "pt"),
+        gp = grid::gpar(
+          lineheight=0.9,
+          fontsize=large_font_size,
+          col=tracks$font_color[track_num]
+          )#,
         # box_gp = gpar(col = "black", fill = "cornsilk")
       )
       grid::grid.draw(year_grob)
       
       # create viewport for track title
       title_vp <- grid::viewport(
-        x = x_left[i], y = y_left[i] - unit(card_width, "cm") / 3,
-        width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
+        x = x_left[i],
+        y = y_left[i] - grid::unit(card_width, "cm") / 3,
+        width = grid::unit(card_width, "cm"),
+        height = grid::unit(card_width, "cm") / 3, 
         clip = "on" # avoid text on the neighboring cards
       )
       title_grob <- gridtext::textbox_grob(
         vp = title_vp,
         text = tracks$track_name[track_num],
-        width = unit(card_width, "cm"), height = unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"),
+        height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
-        margin = unit(rep(2,4), "pt"),
+        margin = grid::unit(rep(2,4), "pt"),
         gp = grid::gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,
         # box_gp = gpar(col = "black", fill = "lightgreen")
       )
@@ -161,7 +178,7 @@ make_cards <- function(
         label = tracks$url[track_num], 
         x = x_right[i], y = y_right[i], 
         hjust = 0.5, vjust = 0.5, 
-        size = unit(card_width*0.8, "cm")
+        size = grid::unit(card_width*0.8, "cm")
       )
       grid::grid.draw(qr)
     }

@@ -7,7 +7,7 @@
 get_tracks(playlist_id)
 }
 \arguments{
-\item{playlist_id}{Spotify playlist ID string.}
+\item{playlist_id}{a \href{https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids}{Spotify playlist ID} (default: \href{https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=b7546d23b6284203}{Top 100 Greatest Songs of All Time})}
 }
 \value{
 Dataframe with track info.

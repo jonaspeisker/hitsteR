@@ -2,7 +2,7 @@
 #'
 #' This function returns a dataframe with the name, artists, and recording year of all tracks in a playlist.
 #'
-#' @param playlist_id Spotify playlist ID string.
+#' @param playlist_id a [Spotify playlist ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) (default: [Top 100 Greatest Songs of All Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=b7546d23b6284203))
 #'
 #' @returns Dataframe with track info.
 #' @export

@@ -12,7 +12,6 @@ library(scico)
 # https://developer.spotify.com/my-applications/#!/applications
 source(".Renviron")
 
-
 # download track info
 my_tracks_raw <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
 

@@ -18,9 +18,38 @@ knitr::opts_chunk$set(
 library(hitsteR)
 ```
 
+# Setup
+
+Before beginning create a Spotify playlist or select a public one that you want to turn into a game. The years of the songs should be approximately uniformly distributed over several decades. 
+
+Assign your [Spotify client ID and client secret](https://developer.spotify.com/my-applications/#!/applications) to the `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` environment variables.
+
+```{r, echo=FALSE}
+source("../.Renviron")
+```
+
+```{r, eval=FALSE}
+Sys.setenv(SPOTIFY_CLIENT_ID = my_client_id)
+Sys.setenv(SPOTIFY_CLIENT_SECRET = my_client_secret)
+```
+
 # Get and clean tracks from Spotify API
 
-# Make layout
+```{r get-tracks}
+my_tracks_raw <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
+```
+
+# Clean track info
+
+```{r clean-tracks}
+my_tracks <- clean_tracks(my_tracks_raw)
+```
+
+# Make single card layout
+
+```{r make-cards, eval = FALSE}
+make_cards(tracks = my_tracks, color = TRUE)
+```
 
 # Prepare cards
 
