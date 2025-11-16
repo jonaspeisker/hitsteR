@@ -45,7 +45,7 @@ make_cards <- function(
   # set file name
   if (is.null(file)) {
     out <- paste0(
-      "output/hitster_", card_size, "_", paper_size, 
+      "inst/extdata/hitster_", card_size, "_", paper_size, 
       ifelse(color, "_color", "_bw"), ".pdf"
       )
   } else if (is.character(file)) {
