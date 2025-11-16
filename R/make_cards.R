@@ -2,7 +2,7 @@
 #'
 #' This function makes a pdf of cards with song info on one side and a QR code to the Spotify URL on the other side.
 #'
-#' @param tracks dataframe containing the columns artist, year, and track_name
+#' @param tracks data.frame containing the columns artist, year, and track_name
 #' @param file a valid path to a pdf file (default: NULL, save file in output/)
 #' @param card_size "small" (3.8 cm) or "original" (6.5 cm) (default: "small")
 #' @param paper_size size "a4" or "letter" (default: "a4")
@@ -102,65 +102,48 @@ make_cards <- function(
       
       # create viewport for artist
       artist_vp <- grid::viewport(
-        x = x_left[i],
-        y = y_left[i] + grid::unit(card_width, "cm") / 3,
-        width = grid::unit(card_width, "cm"),
-        height = grid::unit(card_width, "cm") / 3, 
+        x = x_left[i], y = y_left[i] + grid::unit(card_width, "cm") / 3,
+        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
         clip = "on" # avoid text on the neighboring cards
       )
       artist_grob <- gridtext::textbox_grob(
         vp = artist_vp,
         text = tracks$artist[track_num],
-        width = grid::unit(card_width, "cm"), 
-        height = grid::unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = grid::unit(rep(2,4), "pt"),
-        gp = grid::gpar(
-          lineheight=0.9, 
-          fontsize=small_font_size,
-          col=tracks$font_color[track_num]
-          )#,
-          # box_gp = gpar(col = "black", fill = "lightblue")
+        gp = grid::gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,
+        # box_gp = gpar(col = "black", fill = "lightblue")
       )
       grid::grid.draw(artist_grob)
       
       # create viewport for year        
       year_vp <- grid::viewport(
-        x = x_left[i],
-        y = y_left[i],
-        width = grid::unit(card_width, "cm"),
-        height = grid::unit(card_width, "cm") / 3, 
+        x = x_left[i], y = y_left[i],
+        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
         clip = "on" # avoid text on the neighboring cards
       )
       year_grob <- gridtext::textbox_grob(
         vp = year_vp,
         text = tracks$year[track_num],
-        width = grid::unit(card_width, "cm"),
-        height = grid::unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = grid::unit(rep(2,4), "pt"),
-        gp = grid::gpar(
-          lineheight=0.9,
-          fontsize=large_font_size,
-          col=tracks$font_color[track_num]
-          )#,
+        gp = grid::gpar(lineheight=0.9, fontsize=large_font_size, col=tracks$font_color[track_num])#,
         # box_gp = gpar(col = "black", fill = "cornsilk")
       )
       grid::grid.draw(year_grob)
       
       # create viewport for track title
       title_vp <- grid::viewport(
-        x = x_left[i],
-        y = y_left[i] - grid::unit(card_width, "cm") / 3,
-        width = grid::unit(card_width, "cm"),
-        height = grid::unit(card_width, "cm") / 3, 
+        x = x_left[i], y = y_left[i] - grid::unit(card_width, "cm") / 3,
+        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
         clip = "on" # avoid text on the neighboring cards
       )
       title_grob <- gridtext::textbox_grob(
         vp = title_vp,
         text = tracks$track_name[track_num],
-        width = grid::unit(card_width, "cm"),
-        height = grid::unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = grid::unit(rep(2,4), "pt"),
         gp = grid::gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,

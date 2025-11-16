@@ -12,6 +12,19 @@ library(scico)
 # https://developer.spotify.com/my-applications/#!/applications
 source(".Renviron")
 
+# my_auth <-
+#   spotifyr::get_spotify_authorization_code(
+#     c("playlist-read-private","playlist-read-collaborative"))
+
+# access_token <- spotifyr::get_spotify_access_token()
+# 
+# my_auth <- 
+#   spotifyr::get_spotify_authorization_code(
+#     c("playlist-read-private","playlist-read-collaborative"))
+
+# scopes <- spotifyr::scopes()
+# scopes[grepl("user-read", scopes) | grepl("playlist", scopes)]
+
 # download track info
 my_tracks_raw <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
 

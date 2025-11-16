@@ -7,14 +7,11 @@
 get_tracks(playlist_id)
 }
 \arguments{
-\item{playlist_id}{a \href{https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids}{Spotify playlist ID} (default: \href{https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=b7546d23b6284203}{Top 100 Greatest Songs of All Time})}
+\item{playlist_id}{a \href{https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids}{Spotify playlist ID}}
 }
 \value{
-Dataframe with track info.
+data.frame with raw track info.
 }
 \description{
 This function returns a dataframe with the name, artists, and recording year of all tracks in a playlist.
-}
-\examples{
-get_tracks("6i2Qd6OpeRBAzxfscNXeWp")
 }
