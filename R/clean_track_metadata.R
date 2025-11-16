@@ -2,12 +2,12 @@
 #'
 #' This function unnests track artists and track names and formats the required artist, year, and track_name columns.
 #'
-#' @param tracks_df dataframe returned by get_tracks()
+#' @param tracks_df dataframe returned by get_track_metadata()
 #'
-#' @returns cleaned Dataframe with track info.
+#' @returns cleaned dataframe
 #' @export
 
-clean_tracks <- function(tracks_df) {
+clean_track_metadata <- function(tracks_df) {
   tracks <-
     tracks_df |>
     tidyr::unnest_wider(track.artists) |> 
@@ -26,6 +26,6 @@ clean_tracks <- function(tracks_df) {
       .keep = "none"
     ) |> 
     dplyr::arrange(year)
-  cat("Cleaned data of ", nrow(tracks), " tracks.")
+  cat("Cleaned data of", nrow(tracks), "tracks.")
   return(tracks)
 }

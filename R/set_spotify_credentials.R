@@ -5,6 +5,7 @@
 #' @param spotify_client_id Spotify client ID
 #' @param spotify_client_secret Spotify client secret
 #' @export
+
 set_spotify_credentials <- function(
     spotify_client_id, 
     spotify_client_secret
@@ -19,6 +20,5 @@ set_spotify_credentials <- function(
   # set env vars
   Sys.setenv(SPOTIFY_CLIENT_ID = spotify_client_id)
   Sys.setenv(SPOTIFY_CLIENT_SECRET = spotify_client_secret)
-  
   cat("Spotify credentials successfully set.")
 }

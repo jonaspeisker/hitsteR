@@ -13,7 +13,7 @@ make_cards(
 )
 }
 \arguments{
-\item{tracks}{dataframe containing the columns artist, year, and track_name}
+\item{tracks}{data.frame containing the columns artist, year, and track_name}
 
 \item{file}{a valid path to a pdf file (default: NULL, save file in output/)}
 

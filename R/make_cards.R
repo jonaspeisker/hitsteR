@@ -17,6 +17,8 @@ make_cards <- function(
     card_size = "small",
     paper_size = "a4",
     color = FALSE) {
+  
+  # set paper size
   if (paper_size == "a4") {
     paper_width <- 21
     paper_height <- 29.7
@@ -27,6 +29,7 @@ make_cards <- function(
     stop("Paper size should be 'a4' or 'letter'.")
   }
   
+  # set card size
   if (card_size == "small") {
     card_width <- 3.8
     small_font_size <- 9
@@ -39,6 +42,7 @@ make_cards <- function(
     stop("Card size should be 'small' or 'original'.")
   }
   
+  # set file name
   if (is.null(file)) {
     out <- paste0(
       "output/hitster_", card_size, "_", paper_size, 
@@ -50,6 +54,7 @@ make_cards <- function(
     stop("File should be NULL or a string.")
   }
   
+  # set color
   if (color == FALSE) {
     tracks$font_color <- "black"
   } else if (color == TRUE) {
@@ -57,13 +62,13 @@ make_cards <- function(
   } else {
     stop("Color should be boolean.")
   }
-  
-  # number of cards along the axes
+
+  # determine number of cards along the axes
   n_cards_x <- paper_width %/% card_width
   n_cards_y <- paper_height %/% card_width
   cards_per_page <- n_cards_x * n_cards_y
   pages <- ceiling(nrow(tracks) / cards_per_page)
-  # margins on each side of the axes
+  # determine margins on each side of the axes
   margin_x <- (paper_width %% card_width) / 2
   margin_y <- (paper_height %% card_width) / 2
   

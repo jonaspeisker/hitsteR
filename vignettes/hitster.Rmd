@@ -10,46 +10,50 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
-# set environment variables
-# source("../.Renviron")
+
 ```
 
 # Setup
 
+Before beginning, create a Spotify playlist or select a public one that you want to turn into a game. The main goal of the game is to build a timeline of songs which makes it a fun way to discover new music (good or bad) and get a sense how styles evolved over time. The playlist can be a wild mix or focus on a particular genre but the years should span a long enough time period to be distinguishable from each other. As a rule of thumb, at least 50 years is recommended. 
+
+Start by assigning your Spotify client ID and client secret to environment variables with `set_spotify_credentials()`. You can get them by going to the dashboard at [developer.spotify.com](https://developer.spotify.com/) and creating a new application. The credentials `my_spotify_client_id` and `my_spotify_client_secret` can be passed directly to the function or set in a different file, such as `.Renviron`.
+
 ```{r setup}
 library(hitsteR)
-```
-
-Before beginning, create a Spotify playlist or select a public one that you want to turn into a game. The years of the songs should be approximately uniformly distributed over several decades. 
-
-Assign your [Spotify client ID and client secret](https://developer.spotify.com/my-applications/#!/applications) to the `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` environment variables.
-
-
-```{r, eval=FALSE}
+source(".Renviron")
 set_spotify_credentials(my_spotify_client_id, my_spotify_client_secret)
+#> Spotify credentials successfully set.
 ```
 
 # Get and clean tracks from Spotify API
 
+The following example uses the playlist [Top 100 Greatest Songs of All Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=770c9e4eaee14574) (which actually contains 117 songs). `get_track_metadata()` takes only a [Spotify playlist ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) as argument. 
+
 ```{r get-tracks}
-my_tracks_raw <- get_tracks(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
+my_track_metadata_raw <- get_track_metadata(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
+#> Got raw data on 117 tracks.
 ```
 
-# Clean track info
+`clean_tracks()` tidies up the raw data returned by the API:
 
 ```{r clean-tracks}
-my_tracks <- clean_tracks(my_tracks_raw)
+my_track_metadata <- clean_track_metadata(my_track_metadata_raw)
+#> Cleaned data on 117 tracks.
 ```
 
 # Make single card layout
 
-```{r make-cards, eval = FALSE}
+Once the data is prepared, the pdf can be generated with `make_cards()`. 
+
+```{r make-cards}
 make_cards(tracks = my_tracks, color = TRUE)
-#![Example output](../output/example.png)
 ```
 
+<!-- ![Example output](../output/example.png) -->
 
 
 # Prepare cards
