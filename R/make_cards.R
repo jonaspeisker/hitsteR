@@ -3,17 +3,19 @@
 #' This function makes a pdf of cards with song info on one side and a QR code to the Spotify URL on the other side.
 #'
 #' @param tracks data.frame containing the columns artist, year, and track_name
-#' @param file a valid path to a pdf file (default: NULL, save file in output/)
+#' @param file_name a file name ending in .pdf to write the output to (default: NULL, set name automatically based on parameters)
+#' @param dir an existing path to write the file (default: "./", the current working directory)
 #' @param card_size "small" (3.8 cm) or "original" (6.5 cm) (default: "small")
 #' @param paper_size size "a4" or "letter" (default: "a4")
 #' @param color color font based on year (default: FALSE)
 #'
-#' @returns PDFs saved to /output.
+#' @returns PDF file
 #' @export
 
 make_cards <- function(
     tracks,
-    file = NULL,
+    file_name = NULL,
+    dir = "./",
     card_size = "small",
     paper_size = "a4",
     color = FALSE) {
@@ -43,22 +45,27 @@ make_cards <- function(
   }
   
   # set file name
-  if (is.null(file)) {
+  if (is.null(file_name)) {
     out <- paste0(
-      "inst/extdata/hitster_", card_size, "_", paper_size, 
+      dir,
+      "hitster_", card_size, "_", paper_size, 
       ifelse(color, "_color", "_bw"), ".pdf"
       )
-  } else if (is.character(file)) {
-    out <- file
+  } else if (is.character(file_name)) {
+    out <- paste0(dir, file_name)
   } else {
-    stop("File should be NULL or a string.")
+    stop("File name should be NULL or a string.")
   }
   
   # set color
   if (color == FALSE) {
     tracks$font_color <- "black"
   } else if (color == TRUE) {
-    tracks$font_color <- scico::scico(nrow(tracks), begin=0, end=1, palette = "batlow")
+    tracks$font_color <- scico::scico(
+      nrow(tracks), 
+      begin=0, end=1, 
+      palette = "batlow"
+      )
   } else {
     stop("Color should be boolean.")
   }
@@ -72,21 +79,65 @@ make_cards <- function(
   margin_x <- (paper_width %% card_width) / 2
   margin_y <- (paper_height %% card_width) / 2
   
-  # left hand page
+  # left hand page (track info)
   # grid coords
   gx_left <- grid::unit(seq(margin_x, paper_width, card_width), "cm")
   gy_left <- grid::unit(seq(margin_y, paper_height, card_width), "cm")
-  # content coords
-  x_left <- rep(gx_left[-1] - grid::unit(card_width/2, "cm"), times = length(gy_left)-1)
-  y_left <- rep(gy_left[-1] - grid::unit(card_width/2, "cm"), each = length(gx_left)-1)
+  # coords of card centroids
+  x_left <- rep(
+    gx_left[-1] - grid::unit(card_width/2, "cm"), 
+    times = length(gy_left)-1
+    )
+  y_left <- rep(
+    gy_left[-1] - grid::unit(card_width/2, "cm"), 
+    each = length(gx_left)-1
+    )
   # data.frame(x_left,y_left)
   
-  # right hand page (mirrored on y axis)
+  # right hand page (QR codes, mirrored horizontally)
+  # grid coords
   gx_right <- grid::unit(seq(paper_width - margin_x, 0, -card_width), "cm")
   gy_right <- gy_left
-  x_right <- rep(gx_right[-1] + grid::unit(card_width/2, "cm"), times = length(gy_right)-1)
-  y_right <- rep(gy_right[-1] - grid::unit(card_width/2, "cm"), each = length(gx_right)-1)
+  # coords of card centroids
+  x_right <- rep(
+    gx_right[-1] + grid::unit(card_width/2, "cm"), 
+    times = length(gy_right)-1
+    )
+  y_right <- rep(
+    gy_right[-1] - grid::unit(card_width/2, "cm"), 
+    each = length(gx_right)-1
+    )
   # data.frame(x_right,y_right)
+  
+  # create viewports for artist (top third of card)
+  artist_vp_list <- mapply(
+    FUN = make_viewport,
+    x_arg = x_left,
+    y_arg = y_left,
+    y_offset = grid::unit(card_width, "cm") / 3,
+    cw = grid::unit(card_width, "cm"),
+    SIMPLIFY = FALSE
+  )
+
+  # create viewports for year (middle third of card)
+  year_vp_list <- mapply(
+    FUN = make_viewport,
+    x_arg = x_left,
+    y_arg = y_left,
+    y_offset = grid::unit(0, "cm"),
+    cw = grid::unit(card_width, "cm"),
+    SIMPLIFY = FALSE
+    )
+  
+  # create viewports for track title (bottom third of card)
+  title_vp_list <- mapply(
+    FUN = make_viewport,
+    x_arg = x_left,
+    y_arg = y_left,
+    y_offset = -1 * grid::unit(card_width, "cm") / 3,
+    cw = grid::unit(card_width, "cm"),
+    SIMPLIFY = FALSE
+  )
   
   #### make pdf ####
   Cairo::Cairo(
@@ -96,6 +147,7 @@ make_cards <- function(
     type = "pdf", 
     units = "cm"
   )
+  
   for (page in 1:pages) {
     # make left hand page with track info
     grid::grid.newpage()
@@ -105,54 +157,54 @@ make_cards <- function(
     for (i in 1:cards_per_page) {
       track_num <- i + cards_per_page * (page - 1)
       
-      # create viewport for artist
-      artist_vp <- grid::viewport(
-        x = x_left[i], y = y_left[i] + grid::unit(card_width, "cm") / 3,
-        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
-        clip = "on" # avoid text on the neighboring cards
-      )
+      # create viewport for artist (top third of card)
       artist_grob <- gridtext::textbox_grob(
-        vp = artist_vp,
+        vp = artist_vp_list[[i]],
         text = tracks$artist[track_num],
-        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"), 
+        height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = grid::unit(rep(2,4), "pt"),
-        gp = grid::gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,
-        # box_gp = gpar(col = "black", fill = "lightblue")
+        gp = grid::gpar(
+          lineheight=0.9, 
+          fontsize=small_font_size, 
+          col=tracks$font_color[track_num]
+          )#,
+        #box_gp = grid::gpar(col = "black", fill = "lightblue")
       )
       grid::grid.draw(artist_grob)
       
-      # create viewport for year        
-      year_vp <- grid::viewport(
-        x = x_left[i], y = y_left[i],
-        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
-        clip = "on" # avoid text on the neighboring cards
-      )
+      # create viewport for year (middle third of card)
       year_grob <- gridtext::textbox_grob(
-        vp = year_vp,
+        vp = year_vp_list[[i]],
         text = tracks$year[track_num],
-        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"), 
+        height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = grid::unit(rep(2,4), "pt"),
-        gp = grid::gpar(lineheight=0.9, fontsize=large_font_size, col=tracks$font_color[track_num])#,
-        # box_gp = gpar(col = "black", fill = "cornsilk")
+        gp = grid::gpar(
+          lineheight=0.9, 
+          fontsize=large_font_size, 
+          col=tracks$font_color[track_num]
+          )#,
+        #box_gp = grid::gpar(col = "black", fill = "cornsilk")
       )
       grid::grid.draw(year_grob)
       
-      # create viewport for track title
-      title_vp <- grid::viewport(
-        x = x_left[i], y = y_left[i] - grid::unit(card_width, "cm") / 3,
-        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
-        clip = "on" # avoid text on the neighboring cards
-      )
+      # create viewport for track title (bottom third of card)
       title_grob <- gridtext::textbox_grob(
-        vp = title_vp,
+        vp = title_vp_list[[i]],
         text = tracks$track_name[track_num],
-        width = grid::unit(card_width, "cm"), height = grid::unit(card_width, "cm") / 3, 
+        width = grid::unit(card_width, "cm"), 
+        height = grid::unit(card_width, "cm") / 3, 
         hjust = 1, vjust = 1, halign = 0.5, valign = 0.5,
         margin = grid::unit(rep(2,4), "pt"),
-        gp = grid::gpar(lineheight=0.9, fontsize=small_font_size, col=tracks$font_color[track_num])#,
-        # box_gp = gpar(col = "black", fill = "lightgreen")
+        gp = grid::gpar(
+          lineheight=0.9, 
+          fontsize=small_font_size, 
+          col=tracks$font_color[track_num]
+          )#,
+        #box_gp = grid::gpar(col = "black", fill = "lightgreen")
       )
       grid::grid.draw(title_grob)
     }
@@ -164,7 +216,8 @@ make_cards <- function(
       track_num <- i + cards_per_page * (page - 1)
       qr <- ggqr::qrGrob(
         label = tracks$url[track_num], 
-        x = x_right[i], y = y_right[i], 
+        x = x_right[i], 
+        y = y_right[i], 
         hjust = 0.5, vjust = 0.5, 
         size = grid::unit(card_width*0.8, "cm")
       )
@@ -172,4 +225,5 @@ make_cards <- function(
     }
   }
   grDevices::dev.off()
+  cat("Wrote file to", out)
 }
