@@ -44,6 +44,18 @@ make_cards <- function(
     stop("Card size should be 'small' or 'original'.")
   }
   
+  # check whether path exists and dir is entered
+  if (!dir.exists(dir)) {
+    stop("Directory does not exist.")
+  } else {
+    dir <- ifelse(endsWith(dir, "/"), dir, paste0(dir, "/"))
+  }
+
+  # check file format
+  if (!endsWith(file_name, ".pdf")) {
+    stop("File name should end with .pdf.")
+  }
+  
   # set file name
   if (is.null(file_name)) {
     out <- paste0(

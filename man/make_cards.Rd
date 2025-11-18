@@ -6,7 +6,8 @@
 \usage{
 make_cards(
   tracks,
-  file = NULL,
+  file_name = NULL,
+  dir = "./",
   card_size = "small",
   paper_size = "a4",
   color = FALSE
@@ -15,7 +16,9 @@ make_cards(
 \arguments{
 \item{tracks}{data.frame containing the columns artist, year, and track_name}
 
-\item{file}{a valid path to a pdf file (default: NULL, save file in output/)}
+\item{file_name}{a file name ending in .pdf to write the output to (default: NULL, set name automatically based on parameters)}
+
+\item{dir}{an existing path to write the file (default: "./", the current working directory)}
 
 \item{card_size}{"small" (3.8 cm) or "original" (6.5 cm) (default: "small")}
 
@@ -24,7 +27,7 @@ make_cards(
 \item{color}{color font based on year (default: FALSE)}
 }
 \value{
-PDFs saved to /output.
+PDF file
 }
 \description{
 This function makes a pdf of cards with song info on one side and a QR code to the Spotify URL on the other side.
