@@ -51,11 +51,6 @@ make_cards <- function(
     dir <- ifelse(endsWith(dir, "/"), dir, paste0(dir, "/"))
   }
 
-  # check file format
-  if (!endsWith(file_name, ".pdf")) {
-    stop("File name should end with .pdf.")
-  }
-  
   # set file name
   if (is.null(file_name)) {
     out <- paste0(
@@ -64,9 +59,13 @@ make_cards <- function(
       ifelse(color, "_color", "_bw"), ".pdf"
       )
   } else if (is.character(file_name)) {
-    out <- paste0(dir, file_name)
+    if (endsWith(file_name, ".pdf")) {
+      out <- paste0(dir, file_name)
+    } else {
+      stop("File name should end with .pdf.")
+    }
   } else {
-    stop("File name should be NULL or a string.")
+    stop("File name should be NULL or a string ending with .pdf.")
   }
   
   # set color
@@ -123,31 +122,34 @@ make_cards <- function(
   
   # create viewports for artist (top third of card)
   artist_vp_list <- mapply(
-    FUN = make_viewport,
-    x_arg = x_left,
-    y_arg = y_left,
-    y_offset = grid::unit(card_width, "cm") / 3,
-    cw = grid::unit(card_width, "cm"),
+    FUN = grid::viewport,
+    x = x_left, 
+    y = y_left + grid::unit(card_width, "cm") / 3,
+    width = grid::unit(card_width, "cm"), 
+    height = grid::unit(card_width, "cm") / 3, 
+    clip = "on",
     SIMPLIFY = FALSE
   )
 
   # create viewports for year (middle third of card)
   year_vp_list <- mapply(
-    FUN = make_viewport,
-    x_arg = x_left,
-    y_arg = y_left,
-    y_offset = grid::unit(0, "cm"),
-    cw = grid::unit(card_width, "cm"),
+    FUN = grid::viewport,
+    x = x_left, 
+    y = y_left,
+    width = grid::unit(card_width, "cm"), 
+    height = grid::unit(card_width, "cm") / 3, 
+    clip = "on",
     SIMPLIFY = FALSE
-    )
+  )
   
   # create viewports for track title (bottom third of card)
   title_vp_list <- mapply(
-    FUN = make_viewport,
-    x_arg = x_left,
-    y_arg = y_left,
-    y_offset = -1 * grid::unit(card_width, "cm") / 3,
-    cw = grid::unit(card_width, "cm"),
+    FUN = grid::viewport,
+    x = x_left, 
+    y = y_left - grid::unit(card_width, "cm") / 3,
+    width = grid::unit(card_width, "cm"), 
+    height = grid::unit(card_width, "cm") / 3, 
+    clip = "on",
     SIMPLIFY = FALSE
   )
   
