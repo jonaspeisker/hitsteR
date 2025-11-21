@@ -26,6 +26,6 @@ clean_track_metadata <- function(tracks_df) {
       .keep = "none"
     ) |> 
     dplyr::arrange(year)
-  cat("Cleaned data of", nrow(tracks), "tracks.")
+  message("Cleaned data of ", nrow(tracks), " tracks.")
   return(tracks)
 }

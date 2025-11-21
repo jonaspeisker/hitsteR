@@ -14,6 +14,6 @@ get_track_metadata <- function(playlist_id){
     tmp <- spotifyr::get_playlist_tracks(playlist_id, offset = page)
     tracks_raw <- rbind(tracks_raw, tmp)
   }
-  cat("Got raw data on", nrow(tracks_raw), "tracks.")
+  message("Got raw data on ", nrow(tracks_raw), " tracks.")
   return(tracks_raw)
 }

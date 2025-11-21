@@ -239,5 +239,5 @@ make_cards <- function(
     }
   }
   grDevices::dev.off()
-  cat("Wrote file to", out)
+  message("Wrote file to ", out)
 }

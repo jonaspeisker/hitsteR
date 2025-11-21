@@ -20,5 +20,5 @@ set_spotify_credentials <- function(
   # set env vars
   Sys.setenv(SPOTIFY_CLIENT_ID = spotify_client_id)
   Sys.setenv(SPOTIFY_CLIENT_SECRET = spotify_client_secret)
-  cat("Spotify credentials successfully set.")
+  message("Spotify credentials successfully set.")
 }
