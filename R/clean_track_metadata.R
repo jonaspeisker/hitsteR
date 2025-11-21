@@ -3,11 +3,17 @@
 #' This function unnests track artists and track names and formats the required artist, year, and track_name columns.
 #'
 #' @param tracks_df dataframe returned by get_track_metadata()
+#' @param artists_n number of artists to include (default: 10)
+#' @param artists_char cumulative number of characters to include in the artist field (default: 34)
 #'
 #' @returns cleaned dataframe
 #' @export
 
-clean_track_metadata <- function(tracks_df) {
+clean_track_metadata <- function(
+    tracks_df, 
+    artists_n = 10,
+    artists_char = 34
+    ) {
   tracks <-
     tracks_df |>
     tidyr::unnest_longer(track.artists) |> 
@@ -17,6 +23,12 @@ clean_track_metadata <- function(tracks_df) {
       url = track.external_urls.spotify
       ) |>
     dplyr::group_by(url) |>
+    dplyr::filter(
+      # only keep artists up to cumulative length
+      cumsum(nchar(artist_name)) <= artists_char,
+      # only keep first n artists
+      1:dplyr::n() <= n_artists
+    ) |> 
     dplyr::summarise(
       artist = paste(artist_name, collapse = " & "),
       year = 
