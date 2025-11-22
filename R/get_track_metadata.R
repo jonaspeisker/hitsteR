@@ -8,12 +8,21 @@
 #' @export
 
 get_track_metadata <- function(playlist_id){
-  # iterate over pages since the API only returns 100 entries at a time
-  tracks_raw <- data.frame()
-  for (page in seq(0, 200, 100)) {
-    tmp <- spotifyr::get_playlist_tracks(playlist_id, offset = page)
-    tracks_raw <- rbind(tracks_raw, tmp)
-  }
+  
+  # Get the playlist metadata (contains total number of tracks)
+  playlist_metadata <- spotifyr::get_playlist(playlist_id)
+  total_tracks <- playlist_metadata$tracks$total
+  message("Playlist contains ", total_tracks, " tracks.")
+  
+  # Spotify returns 100 tracks per request
+  offsets <- seq(0, total_tracks - 1, by = 100)
+  tracks_list <- lapply(offsets, function(off) {
+    spotifyr::get_playlist_tracks(playlist_id, offset = off)
+  })
+  # Combine into one data frame
+  tracks_raw <- dplyr::bind_rows(tracks_list)
+  
   message("Got raw data on ", nrow(tracks_raw), " tracks.")
   return(tracks_raw)
+  
 }
