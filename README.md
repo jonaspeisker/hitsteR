@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 hitsteR is an [R](https://www.r-project.org/) package to make a song
@@ -49,9 +50,8 @@ set_spotify_credentials(my_spotify_client_id, my_spotify_client_secret)
 ## Get and clean tracks from Spotify API
 
 The following example uses the playlist [Top 100 Greatest Songs of All
-Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=770c9e4eaee14574)
-(which actually contains 117 songs). `get_track_metadata()` takes only a
-[Spotify playlist
+Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=770c9e4eaee14574).
+`get_track_metadata()` takes only a [Spotify playlist
 ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids)
 as argument.
 

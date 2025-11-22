@@ -7,12 +7,12 @@
 \format{
 \subsection{\code{track_metadata}}{
 
-A data frame with 114 rows and 5 columns:
+A data frame with the following columns:
 \describe{
-\item{artist1, artist}{First artist & first two artists concatenated}
+\item{url}{External Spotify URL of track}
+\item{artist}{Concatenated artist names}
 \item{year}{Release year of track}
 \item{track_name}{Name of track}
-\item{url}{External Spotify URL of track}
 }
 }
 }

@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 # hitsteR <a href="https://github.com/jonaspeisker/hitsteR"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 hitsteR is an [R](https://www.r-project.org/) package to make a song guessing game. Based on a Spotify playlist, they generate a pdf with artist, year, and song title on one side and a QR code to play the song on the other side.
@@ -44,7 +45,7 @@ set_spotify_credentials(my_spotify_client_id, my_spotify_client_secret)
 
 ## Get and clean tracks from Spotify API
 
-The following example uses the playlist [Top 100 Greatest Songs of All Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=770c9e4eaee14574) (which actually contains 117 songs). `get_track_metadata()` takes only a [Spotify playlist ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) as argument. 
+The following example uses the playlist [Top 100 Greatest Songs of All Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=770c9e4eaee14574). `get_track_metadata()` takes only a [Spotify playlist ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) as argument. 
 
 ```{r get-tracks}
 my_track_metadata_raw <- get_track_metadata(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
