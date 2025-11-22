@@ -1,13 +1,90 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # hitsteR
 
-[R](https://www.r-project.org/) functions to make a song guessing game. Based on a Spotify playlist, they generate a pdf with artist, year, and song title on one side and a QR code to play the song on the other side.
+<!-- badges: start -->
 
-![Example output](inst/extdata/example.png)
+<!-- badges: end -->
 
-## How to play
+hitsteR is an [R](https://www.r-project.org/) package to make a song
+guessing game. Based on a Spotify playlist, they generate a pdf with
+artist, year, and song title on one side and a QR code to play the song
+on the other side.
 
-The rules of game can be found [here](https://hitstergame.com/en-us/how-to-play/).
+## Installation
 
-## License
+You can install the development version of hitsteR from
+[GitHub](https://github.com/) with:
 
-HitsteR is licensed under the [GNU General Public License][https://www.gnu.org/licenses/gpl-3.0.html], version 3.
+``` r
+devtools::install_github("jonaspeisker/hitsteR")
+```
+
+## Setup
+
+Before beginning, create a Spotify playlist or select a public one that
+you want to turn into a game. The main goal of the game is to build a
+timeline of songs which makes it a fun way to discover new music (good
+or bad) and get a sense how styles evolved over time. The playlist can
+be a wild mix or focus on a particular genre but the years should span a
+long enough time period to be distinguishable from each other. As a rule
+of thumb, at least 50 years is recommended.
+
+Start by assigning your Spotify client ID and client secret to
+environment variables with `set_spotify_credentials()`. You can get them
+by going to the dashboard at
+[developer.spotify.com](https://developer.spotify.com/) and creating a
+new application. The credentials `my_spotify_client_id` and
+`my_spotify_client_secret` can be passed directly to the function or set
+in a different file, such as `.Renviron`.
+
+``` r
+library(hitsteR)
+source(".Renviron")
+set_spotify_credentials(my_spotify_client_id, my_spotify_client_secret)
+#> Spotify credentials successfully set.
+```
+
+## Get and clean tracks from Spotify API
+
+The following example uses the playlist [Top 100 Greatest Songs of All
+Time](https://open.spotify.com/playlist/6i2Qd6OpeRBAzxfscNXeWp?si=770c9e4eaee14574)
+(which actually contains 117 songs). `get_track_metadata()` takes only a
+[Spotify playlist
+ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids)
+as argument.
+
+``` r
+my_track_metadata_raw <- get_track_metadata(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
+#> Got raw data on 117 tracks.
+```
+
+`clean_tracks()` tidies up the raw data returned by the API:
+
+``` r
+my_track_metadata <- clean_track_metadata(my_track_metadata_raw)
+#> Cleaned data on 117 tracks.
+```
+
+## Make card layout
+
+Once the data is prepared, the pdf can be generated with `make_cards()`.
+
+``` r
+make_cards(tracks = my_tracks, color = TRUE)
+```
+
+## Prepare cards
+
+- Print the pdf double-sided and mirrored on the long edge. For best
+  results use heavy paper or laminate the pages.
+- Cut pages along the marks.
+- Enjoy!
+
+## Example
+
+<figure>
+<img src="inst/extdata/example.png" alt="Example output" />
+<figcaption aria-hidden="true">Example output</figcaption>
+</figure>
