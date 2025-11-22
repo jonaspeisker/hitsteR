@@ -32,12 +32,12 @@ long enough time period to be distinguishable from each other. As a rule
 of thumb, at least 50 years is recommended.
 
 Start by assigning your Spotify client ID and client secret to
-environment variables with `set_spotify_credentials()`. You can get them
-by going to the dashboard at
-[developer.spotify.com](https://developer.spotify.com/) and creating a
-new application. The credentials `my_spotify_client_id` and
-`my_spotify_client_secret` can be passed directly to the function or set
-in a different file, such as `.Renviron`.
+environment variables. You can get them at the [Spotify developer
+dashboard](https://developer.spotify.com/) and creating a new
+application. The credentials `my_spotify_client_id` and
+`my_spotify_client_secret` can be passed directly to
+`set_spotify_credentials()` or set in a different file, such as
+`.Renviron`.
 
 ``` r
 library(hitsteR)
@@ -57,10 +57,11 @@ as argument.
 
 ``` r
 my_track_metadata_raw <- get_track_metadata(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
+#> Playlist contains 117 tracks.
 #> Got raw data on 117 tracks.
 ```
 
-`clean_tracks()` tidies up the raw data returned by the API:
+`clean_track_metadata()` tidies up the raw data returned by the API:
 
 ``` r
 my_track_metadata <- clean_track_metadata(my_track_metadata_raw)
@@ -73,6 +74,7 @@ Once the data is prepared, the pdf can be generated with `make_cards()`.
 
 ``` r
 make_cards(tracks = my_tracks, color = TRUE)
+#> Wrote file to ./hitster_small_a4_color.pdf
 ```
 
 ## Prepare cards
@@ -80,7 +82,16 @@ make_cards(tracks = my_tracks, color = TRUE)
 - Print the pdf double-sided and mirrored on the long edge. For best
   results use heavy paper or laminate the pages.
 - Cut pages along the marks.
-- Enjoy!
+
+## Rules
+
+- The cards are stacked in the middle with the QR code on top.
+- Each player starts with one open card. The goal of the game is to
+  build a timeline of tracks around this card.
+- Players draw cards turn by turn. The QR code is scanned by somebody
+  else which opens the Spotify app and plays the track. If the card is
+  placed correctly in the player’s timeline, they can keep it.
+- The first player to reach a previously agreed number of cards wins.
 
 ## Example
 

@@ -27,7 +27,7 @@ clean_track_metadata <- function(
       # only keep artists up to cumulative length
       cumsum(nchar(artist_name)) <= artists_char,
       # only keep first n artists
-      1:dplyr::n() <= n_artists
+      1:dplyr::n() <= artists_n
     ) |> 
     dplyr::summarise(
       artist = paste(artist_name, collapse = " & "),
