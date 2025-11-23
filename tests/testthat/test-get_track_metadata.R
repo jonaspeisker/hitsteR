@@ -1,5 +1,9 @@
-test_that("tracks are correctly retrieved from Spotity API", {
-  # result <- get_track_metadata(playlist_id = "6i2Qd6OpeRBAzxfscNXeWp")
-  # expect_s3_class(result, "data.frame")
+test_that("playlist id check work", {
+  expect_error(
+    get_track_metadata(""),
+    "malformed")
+  expect_error(
+    get_track_metadata("asd123"),
+    "malformed")
   }
 )

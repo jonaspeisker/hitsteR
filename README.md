@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/jonaspeisker/hitsteR/graph/badge.svg)](https://app.codecov.io/gh/jonaspeisker/hitsteR)
 <!-- badges: end -->
 
 hitsteR is an [R](https://www.r-project.org/) package to make a song

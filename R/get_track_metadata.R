@@ -9,6 +9,10 @@
 
 get_track_metadata <- function(playlist_id){
   
+  if (!grepl("^[A-Za-z0-9]{22}$", playlist_id)) {
+    stop("Playlist id looks malformed.")
+  }
+  
   # Get the playlist metadata (contains total number of tracks)
   playlist_metadata <- spotifyr::get_playlist(playlist_id)
   total_tracks <- playlist_metadata$tracks$total

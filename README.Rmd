@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jonaspeisker/hitsteR/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/jonaspeisker/hitsteR/graph/badge.svg)](https://app.codecov.io/gh/jonaspeisker/hitsteR)
 <!-- badges: end -->
 
 hitsteR is an [R](https://www.r-project.org/) package to make a song guessing game. Based on a Spotify playlist, they generate a pdf with artist, year, and song title on one side and a QR code to play the song on the other side.
