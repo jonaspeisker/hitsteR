@@ -29,6 +29,11 @@ clean_track_metadata <- function(
       # only keep first n artists
       1:dplyr::n() <= artists_n
     ) |> 
+    dplyr::mutate(
+      #trim white space
+      track_name = trimws(track.name),
+      artist_name = trimws(artist_name)
+    ) |> 
     dplyr::summarise(
       artist = paste(artist_name, collapse = " & "),
       year = 
@@ -36,7 +41,7 @@ clean_track_metadata <- function(
         dplyr::first() |> 
         substr(1, 4) |> 
         as.integer(),
-      track_name = dplyr::first(track.name),
+      track_name = dplyr::first(track_name),
       .groups = "drop"
     ) |>
     dplyr::arrange(year)

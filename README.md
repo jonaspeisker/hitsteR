@@ -11,9 +11,9 @@ coverage](https://codecov.io/gh/jonaspeisker/hitsteR/graph/badge.svg)](https://a
 <!-- badges: end -->
 
 hitsteR is an [R](https://www.r-project.org/) package to make a song
-guessing game. Based on a Spotify playlist, they generate a pdf with
-artist, year, and song title on one side and a QR code to play the song
-on the other side.
+guessing game. Based on a Spotify playlist, it generates a pdf of
+playing cards with artist, year, and song title on one side and a QR
+code to the track on the other side.
 
 ## Installation
 
@@ -32,7 +32,7 @@ timeline of songs which makes it a fun way to discover new music (good
 or bad) and get a sense how styles evolved over time. The playlist can
 be a wild mix or focus on a particular genre but the years should span a
 long enough time period to be distinguishable from each other. As a rule
-of thumb, at least 50 years is recommended.
+of thumb, at least 50 years are recommended.
 
 Start by assigning your Spotify client ID and client secret to
 environment variables. You can get them at the [Spotify developer
@@ -90,9 +90,9 @@ make_cards(tracks = my_tracks, color = TRUE)
 - The cards are stacked in the middle with the QR code on top.
 - Each player starts with one open card. The goal of the game is to
   build a timeline of tracks around this card.
-- Players draw cards turn by turn. The QR code is scanned by somebody
-  else which opens the Spotify app and plays the track. If the card is
-  placed correctly in the player’s timeline, they can keep it.
+- Players draw cards in turn. The QR code is scanned by somebody else
+  which opens the Spotify app and plays the track. If the card is placed
+  correctly in the player’s timeline, they can keep it.
 - The first player to reach a previously agreed number of cards wins.
 
 ## Example
