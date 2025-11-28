@@ -7,17 +7,22 @@
 #' @export
 
 get_oo_composers <- function() {
-  oo_base <- "https://api.openopus.org"
-  oo_dump <- httr::GET(paste0(oo_base, "/work/dump.json"), encode = "json")  
-  oo_dump_flat <- 
+  response <- httr::GET("https://api.openopus.org/work/dump.json", encode = "json")
+  stopifnot(response$status_code == 200)
+  
+  oo_flat <- 
     jsonlite::fromJSON(
-      httr::content(oo_dump, as = "text", encoding = "UTF-8"), 
-      flatten = TRUE) |>
-    dplyr::pull(composers) |> data.frame() |>  
+      httr::content(response, as = "text", encoding = "UTF-8"), 
+      flatten = TRUE
+    ) |>
+    dplyr::pull(composers) |> 
+    data.frame() |>  
     dplyr::arrange(birth) |>  
     dplyr::mutate(
       birth = as.integer(substr(birth, 1, 4)),
       death = as.integer(substr(death, 1, 4)),
     )
-  return(oo_dump_flat) 
+  
+  message("Got composer names, birth, and death years from Open Opus.")
+  return(oo_flat)
 }
