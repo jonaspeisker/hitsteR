@@ -1,6 +1,5 @@
 #build documentation
 library(devtools)
-library(testthat)
 # source(".Renviron")
 
 load_all()
@@ -11,3 +10,4 @@ build_readme()
 check()
 # .httr-oauth
 # tests/testthat/.httr-oauth
+# "output/history_hitster_small_a4_color.pdf"

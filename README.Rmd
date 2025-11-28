@@ -84,5 +84,5 @@ make_cards(tracks = my_tracks, color = TRUE)
 
 ## Example
 
-![Example output](inst/extdata/example.png)
+![Example output](dev/examples/example.png)
 

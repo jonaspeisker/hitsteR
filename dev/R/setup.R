@@ -1,5 +1,6 @@
 # install.packages(c("devtools", "roxygen2","usethis", "testthat", "available"))
 library(devtools)
+library(testthat)
 
 # make package
 available::available("hitsteR")
@@ -28,8 +29,7 @@ use_dev_package(
   type = "Imports",
   remote = "github::coolbutuseless/ggqr"
   )
-use_package("jsonlite", "Imports")
-use_package("httr", "Imports")
+use_package("httr2", "Imports")
 use_package("grDevices", "Imports")
 
 # setup test environment
@@ -45,6 +45,7 @@ use_gpl_license(version = 3, include_future = TRUE)
 # add data
 use_data(track_metadata_raw, overwrite = TRUE)
 use_data(track_metadata, overwrite = TRUE)
+use_data(oo_composers, overwrite = TRUE)
 
 # add github actions
 use_github_action("check-standard")

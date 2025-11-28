@@ -12,47 +12,48 @@ history_tracks_raw <- get_track_metadata("3mBfXpoqUJEa5MegTG7hJK")
 history_tracks <- clean_track_metadata(history_tracks_raw, artists_n = 1)
 
 #### get composer info from open opus api ####
-oo_dump_flat <- get_oo_composers()
+oo_composers <- get_oo_composers()
 
 # save missing composers
 composers_not_in_oo <- 
   history_tracks |> 
-  stringdist_anti_join(oo_dump_flat, by = c("artist" ="complete_name")) %>% 
+  stringdist_anti_join(oo_composers, by = c("artist" ="complete_name")) %>% 
   distinct(artist)
 composers_not_in_oo
-write_csv(composers_not_in_oo, file = "data/composers_not_in_oo.csv")
+composers_not_in_oo |> 
+  write_csv(file = "dev/data/composers_not_in_oo.csv")
 
 # load 
 composers <- 
-  read_csv("data/composers.csv") |> 
-  bind_rows(oo_dump_flat) |> 
-  select(
-    artist = complete_name,
-    birth,
-    death
+  read_csv("dev/data/composers_not_in_oo_filled.csv") |> 
+  bind_rows(oo_composers) |> 
+  rename(
+    artist = complete_name
   )
 composers
 
 # merge track with composer info
 history_tracks_merge <- 
   history_tracks |> 
-  stringdist_left_join(composers, by = join_by(artist)) |>  
+  stringdist_left_join(
+    composers, by = join_by(artist), 
+    distance_col = "dist"
+    ) |>  
   mutate(
-    artist = paste0(artist.x, " (", birth, "-", death, ")")
+    artist = paste0(artist.x, " (", birth, "-", death, ")"),
+    # impute year of composition
+    year = round((birth + death) / 2)
   ) %>% 
-  select(-year)
+  select(url, artist, year, track_name)
 history_tracks_merge |> 
-  write_csv(file = "data/history_tracks_merge.csv")
+  write_csv(file = "dev/data/history_tracks_merge.csv")
 
 # make single card layout
 make_cards(
   tracks = history_tracks_merge, 
   color = TRUE,
-  file = "output/history_hitster_small_a4_color.pdf"
+  file = "dev/examples/history_hitster_small_a4_color.pdf"
   )
-
-# make all examples in /output
-make_examples()
 
 
 

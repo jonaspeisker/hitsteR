@@ -98,6 +98,6 @@ make_cards(tracks = my_tracks, color = TRUE)
 ## Example
 
 <figure>
-<img src="inst/extdata/example.png" alt="Example output" />
+<img src="dev/examples/example.png" alt="Example output" />
 <figcaption aria-hidden="true">Example output</figcaption>
 </figure>
