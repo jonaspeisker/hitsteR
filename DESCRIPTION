@@ -23,6 +23,7 @@ Imports:
     httr2,
     scico,
     spotifyr,
+    stringr,
     tidyr
 Depends: 
     R (>= 4.1)
