@@ -1,10 +1,9 @@
 #build documentation
 library(devtools)
-# source(".Renviron")
 
 load_all()
-install()
 document()
+install()
 build_vignettes()
 build_readme()
 check()

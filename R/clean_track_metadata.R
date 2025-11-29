@@ -2,11 +2,11 @@
 #'
 #' This function unnests track artists and track names and formats the required artist, year, and track_name columns.
 #'
-#' @param tracks_df dataframe returned by get_track_metadata()
+#' @param tracks_df dataframe returned by [get_track_metadata()]
 #' @param artists_n number of artists to include (default: 10)
 #' @param artists_char cumulative number of characters to include in the artist field (default: 34)
 #'
-#' @returns cleaned dataframe
+#' @returns dataframe
 #' @export
 
 clean_track_metadata <- function(
@@ -14,7 +14,7 @@ clean_track_metadata <- function(
     artists_n = 10,
     artists_char = 34
     ) {
-  tracks <-
+  tracks_unnested <-
     tracks_df |>
     tidyr::unnest_longer(track.artists) |> 
     tidyr::unnest_wider(track.artists) |>
@@ -28,11 +28,32 @@ clean_track_metadata <- function(
       cumsum(nchar(artist_name)) <= artists_char,
       # only keep first n artists
       1:dplyr::n() <= artists_n
-    ) |> 
+    )
+  
+  tracks <- 
+    tracks_unnested |> 
     dplyr::mutate(
-      #trim white space
+      # trim white space
       track_name = trimws(track.name),
-      artist_name = trimws(artist_name)
+      artist_name = trimws(artist_name),
+      # remove artist_name from track_name
+      artist_regex = paste0(
+        "^\\s*(?:", 
+        strsplit(artist_name, split = " ", fixed = TRUE)[[1]] |> 
+          paste0(collapse = "|"), 
+        ")\\s*[:\\-]\\s*"
+      ),
+      track_name = stringr::str_remove(track_name, artist_regex),
+      # remove parentheses at the end
+      track_name = stringr::str_remove(track_name, "\\s*\\([^)]*\\)"),
+      # shorten very long track names
+      track_name = ifelse(
+        nchar(track_name) > 60,
+        track_name |> 
+          strsplit(":") |> 
+          sapply(function(x) paste(x[-length(x)], collapse = ":")),
+        track_name
+      )
     ) |> 
     dplyr::summarise(
       artist = paste(artist_name, collapse = " & "),
@@ -45,6 +66,8 @@ clean_track_metadata <- function(
       .groups = "drop"
     ) |>
     dplyr::arrange(year)
+  
   message("Cleaned data of ", nrow(tracks), " tracks.")
   return(tracks)
 }
+

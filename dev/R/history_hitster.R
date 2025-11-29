@@ -1,5 +1,4 @@
 library(tidyverse)
-library(scico)
 library(fuzzyjoin)
 
 source(".Renviron")
@@ -10,18 +9,8 @@ history_tracks_raw <- get_track_metadata("3mBfXpoqUJEa5MegTG7hJK")
 
 # only keep first artist (composer)
 history_tracks <- clean_track_metadata(history_tracks_raw, artists_n = 1)
-
-#### get composer info from open opus api ####
-oo_composers <- get_oo_composers()
-
-# save missing composers
-composers_not_in_oo <- 
-  history_tracks |> 
-  stringdist_anti_join(oo_composers, by = c("artist" ="complete_name")) %>% 
-  distinct(artist)
-composers_not_in_oo
-composers_not_in_oo |> 
-  write_csv(file = "dev/data/composers_not_in_oo.csv")
+# split names at : and - 
+# if nchar > x, remove last
 
 # load 
 composers <- 
@@ -40,7 +29,7 @@ history_tracks_merge <-
     distance_col = "dist"
     ) |>  
   mutate(
-    artist = paste0(artist.x, " (", birth, "-", death, ")"),
+    artist = paste0(artist.x, " (", birth, "–", death, ")"),
     # impute year of composition
     year = round((birth + death) / 2)
   ) %>% 
@@ -55,5 +44,17 @@ make_cards(
   file = "dev/examples/history_hitster_small_a4_color.pdf"
   )
 
+
+#### get composer info from open opus api ####
+# oo_composers <- get_oo_composers()
+# 
+# # save missing composers
+# composers_not_in_oo <- 
+#   history_tracks |> 
+#   stringdist_anti_join(oo_composers, by = c("artist" ="complete_name")) %>% 
+#   distinct(artist)
+# composers_not_in_oo
+# composers_not_in_oo |> 
+#   write_csv(file = "dev/data/composers_not_in_oo.csv")
 
 

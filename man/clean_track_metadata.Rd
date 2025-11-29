@@ -7,14 +7,14 @@
 clean_track_metadata(tracks_df, artists_n = 10, artists_char = 34)
 }
 \arguments{
-\item{tracks_df}{dataframe returned by get_track_metadata()}
+\item{tracks_df}{dataframe returned by \code{\link[=get_track_metadata]{get_track_metadata()}}}
 
 \item{artists_n}{number of artists to include (default: 10)}
 
 \item{artists_char}{cumulative number of characters to include in the artist field (default: 34)}
 }
 \value{
-cleaned dataframe
+dataframe
 }
 \description{
 This function unnests track artists and track names and formats the required artist, year, and track_name columns.
